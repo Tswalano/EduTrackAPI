@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import za.co.edutrack.api.model.School;
+import za.co.edutrack.api.model.Users;
 import za.co.edutrack.api.repository.SchoolRepository;
+import za.co.edutrack.api.repository.UsersRepository;
 
 @RestController
-@RequestMapping("/schools")
+@RequestMapping("/api/v1/schools")
 public class SchoolController {
 
     @Autowired
     private SchoolRepository schoolRepository;
+    private UsersRepository usersRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Collection<School>> getSchools() {
@@ -46,6 +49,22 @@ public class SchoolController {
         schoolRepository.delete(id);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/users", method = RequestMethod.GET)
+    public ResponseEntity<Collection<School>> getSchoolUsers(@PathVariable long id) {
+        School school = schoolRepository.findOne(id);
+
+        if (school != null) {
+            return new ResponseEntity(school.getUsers(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>((Collection<School>) null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public ResponseEntity<Users> getUsers() {
+        return new ResponseEntity<Users>((Users) usersRepository.findAll(), HttpStatus.OK);
     }
 
 }

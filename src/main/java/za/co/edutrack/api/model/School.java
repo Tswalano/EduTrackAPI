@@ -1,6 +1,7 @@
 package za.co.edutrack.api.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.catalina.User;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -16,39 +17,69 @@ public class School {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "school_id")
+    @Column(name = "schoolID")
     private Long id;
 
     @NotBlank
-    @Column(name = "name")
+    @Column(name = "schoolName")
     private String schoolName;
 
+    @NotNull
+    @Column(name = "phoneNum")
+    private Integer phoneNum;
+
     @NotBlank
-    @Column(name = "grade")
-    private String grade;
+    @Column(name = "address_line1")
+    private String address_line1;
+
+    @NotBlank
+    @Column(name = "address_line2")
+    private String address_line2;
+
+    @NotBlank
+    @Column(name = "city")
+    private String city;
+
+    @NotBlank
+    @Column(name = "province")
+    private String province;
 
     @NotNull
-    @Column(name = "year")
-    private Integer year;
+    @Column(name = "postalCode")
+    private int postalCode;
+
+    @NotNull
+    @Column(name = "circuit")
+    private String circuit;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    @JoinColumn(name = "studentID")
+    private Student student;
 
     @OneToMany(mappedBy = "school", // Refers to "subject" property in Subject class
             cascade = {CascadeType.ALL})
-    private List<Subject> subjects;
+    private List<Grades> grades;
 
-    @ManyToMany
-    @JsonBackReference
-    @JoinTable(name = "student_school",
-            joinColumns = @JoinColumn(name = "school_id", referencedColumnName = "school_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "student_id"))
-    private List<Student> students;
+    @OneToMany(mappedBy = "school", // Refers to "subject" property in Subject class
+            cascade = {CascadeType.ALL})
+    private List<Users> users;
 
     public School() {
     }
 
-    public School(String schoolName, String grade, Integer year) {
+    //Constructor
+
+    public School(String schoolName, Integer phoneNum, String address_line1, String address_line2,
+                  String city, String province, int postalCode, String circuit) {
         this.schoolName = schoolName;
-        this.grade = grade;
-        this.year = year;
+        this.phoneNum = phoneNum;
+        this.address_line1 = address_line1;
+        this.address_line2 = address_line2;
+        this.city = city;
+        this.province = province;
+        this.postalCode = postalCode;
+        this.circuit = circuit;
     }
 
     //    Getters and Setters
@@ -68,36 +99,84 @@ public class School {
         this.schoolName = schoolName;
     }
 
-    public String getGrade() {
-        return grade;
+    public Integer getPhoneNum() {
+        return phoneNum;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public void setPhoneNum(Integer phoneNum) {
+        this.phoneNum = phoneNum;
     }
 
-    public Integer getYear() {
-        return year;
+    public String getAddress_line1() {
+        return address_line1;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setAddress_line1(String address_line1) {
+        this.address_line1 = address_line1;
     }
 
-    public List<Student> getStudents() {
-        return students;
+    public String getAddress_line2() {
+        return address_line2;
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
+    public void setAddress_line2(String address_line2) {
+        this.address_line2 = address_line2;
     }
 
-    public List<Subject> getSubjects() {
-        return subjects;
+    public String getCity() {
+        return city;
     }
 
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public int getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(int postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getCircuit() {
+        return circuit;
+    }
+
+    public void setCircuit(String circuit) {
+        this.circuit = circuit;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public List<Grades> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<Grades> grades) {
+        this.grades = grades;
+    }
+
+    public List<Users> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Users> users) {
+        this.users = users;
     }
 
     @Override
@@ -105,20 +184,33 @@ public class School {
         return "School{" +
                 "id=" + id +
                 ", schoolName='" + schoolName + '\'' +
-                ", grade='" + grade + '\'' +
-                ", year=" + year +
-                ", subjects=" + subjects +
-                ", students=" + students +
+                ", phoneNum=" + phoneNum +
+                ", address_line1='" + address_line1 + '\'' +
+                ", address_line2='" + address_line2 + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", postalCode=" + postalCode +
+                ", circuit='" + circuit + '\'' +
+                ", student=" + student +
+                ", grades=" + grades +
                 '}';
     }
 
     // Add convenience methods for Bi-Directional relationship
-    public void addSubject(Subject subject) {
-        if (subjects == null) {
-            subjects = new ArrayList<>();
+    public void addGrades(Grades grade) {
+        if (grades == null) {
+            grades = new ArrayList<>();
         }
 
-        subjects.add(subject);
-        subject.setSchool(this);
+        grades.add(grade);
+        grade.setSchool(this);
     }
+
+//    public void addUsers(Users user) {
+//        if (users == null) {
+//            users = new ArrayList<>();
+//        }
+//        users.add(user);
+////        user.setSchool(this);
+//    }
 }

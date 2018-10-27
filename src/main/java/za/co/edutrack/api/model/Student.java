@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.*;
 
 @Table(name = "Student")
@@ -14,65 +15,63 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "student_id")
+    @Column(name = "studentID")
     private Long id;
 
     @NotBlank
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstName")
+    private String firstName;
 
     @NotBlank
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "lastName")
+    private String lastName;
 
     @NotBlank
     @Column(name = "gender")
     private String gender;
 
-    @NotBlank
+    @NotNull
+    @Column(name = "idNumber")
+    private Long idNumber;
+
     @Column(name = "email")
     private String email;
 
-    @NotBlank
-    @Column(name = "username")
-    private String username;
-
-    @NotBlank
     @Column(name = "password")
     private String password;
 
     @NotNull
-    @Column(name = "number")
-    private Long number;
+    @Column(name = "phoneNum")
+    private Integer phoneNum;
 
     @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "dateOfBirth")
     private Date dateOfBirth;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "student_school",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "school_id", referencedColumnName = "school_id"))
+    @OneToMany(mappedBy = "student", // Refers to "subject" property in Subject class
+            cascade = {CascadeType.ALL})
     private List<School> school;
-
 
     //  Constructor
     public Student() {
     }
 
-    public Student(String name, String surname, String gender, String email, String username, String password, Long number, Date dateOfBirth) {
-        this.name = name;
-        this.surname = surname;
+    public Student(String firstName, String lastName, String gender, Long idNumber, String email, String password,
+                   Integer phoneNum, Date dateOfBirth) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.gender = gender;
+        this.idNumber = idNumber;
         this.email = email;
-        this.username = username;
         this.password = password;
-        this.number = number;
+        this.phoneNum = phoneNum;
         this.dateOfBirth = dateOfBirth;
     }
 
     //  Generate getters/setters
+
+
     public Long getId() {
         return id;
     }
@@ -81,20 +80,20 @@ public class Student {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getGender() {
@@ -105,20 +104,20 @@ public class Student {
         this.gender = gender;
     }
 
+    public Long getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(Long idNumber) {
+        this.idNumber = idNumber;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -129,12 +128,12 @@ public class Student {
         this.password = password;
     }
 
-    public Long getNumber() {
-        return number;
+    public Integer getPhoneNum() {
+        return phoneNum;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setPhoneNum(Integer phoneNum) {
+        this.phoneNum = phoneNum;
     }
 
     public Date getDateOfBirth() {
@@ -153,28 +152,27 @@ public class Student {
         this.school = school;
     }
 
-    //  Generate toString() method
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender='" + gender + '\'' +
+                "studentID=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", idNumber=" + idNumber +
                 ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", number=" + number +
+                ", phoneNum=" + phoneNum +
                 ", dateOfBirth=" + dateOfBirth +
                 ", school=" + school +
                 '}';
     }
 
     //      Add a convenience method
-    public void addSchool(School mySchool) {
+    public void addSchool(School schools) {
         if (school == null) {
             school = new ArrayList<>();
         }
-        school.add(mySchool);
+        school.add(schools);
+        schools.setStudent(this);
     }
 }

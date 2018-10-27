@@ -12,33 +12,37 @@ public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "subject_id")
+    @Column(name = "subjectID")
     private Long id;
 
     @NotBlank
-    @Column(name = "subject")
-    private String subject;
+    @Column(name = "subjectName")
+    private String subjectName;
 
     @NotBlank
-    @Column(name = "Term")
-    private String term;
+    @Column(name = "subjectCode")
+    private String subjectCode;
+
+    @NotNull
+    @Column(name = "term")
+    private Integer term;
 
     @NotNull
     @Column(name = "mark")
     private Integer mark;
 
 //    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference
-    @JoinColumn(name = "school_id")
-    private School school;
-
+    @JoinColumn(name = "gradeID")
+    private Grades grades;
 
     public Subject() {
     }
 
-    public Subject(String subject, String term, Integer mark) {
-        this.subject = subject;
+    public Subject(String subjectName, String subjectCode, Integer term, Integer mark) {
+        this.subjectName = subjectName;
+        this.subjectCode = subjectCode;
         this.term = term;
         this.mark = mark;
     }
@@ -51,20 +55,28 @@ public class Subject {
         this.id = id;
     }
 
-    public String getTerm() {
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
+
+    public Integer getTerm() {
         return term;
     }
 
-    public void setTerm(String term) {
+    public void setTerm(Integer term) {
         this.term = term;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
 
     public Integer getMark() {
@@ -75,22 +87,23 @@ public class Subject {
         this.mark = mark;
     }
 
-    public School getSchool() {
-        return school;
+    public Grades getGrades() {
+        return grades;
     }
 
-    public void setSchool(School school) {
-        this.school = school;
+    public void setGrades(Grades grades) {
+        this.grades = grades;
     }
 
     @Override
     public String toString() {
         return "Subject{" +
                 "id=" + id +
-                ", subject='" + subject + '\'' +
-                ", term='" + term + '\'' +
+                ", subjectName='" + subjectName + '\'' +
+                ", subjectCode='" + subjectCode + '\'' +
+                ", term=" + term +
                 ", mark=" + mark +
-                ", school=" + school +
+                ", grades=" + grades +
                 '}';
     }
 }
