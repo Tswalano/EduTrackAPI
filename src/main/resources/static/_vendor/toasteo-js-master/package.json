@@ -1,0 +1,44 @@
+{
+  "name": "toasteo",
+  "homepage": "http://www.deegital.be",
+  "description": "Simple Toast plugin that is lightweight and written in vanilla JS.",
+  "version": "1.0.7",
+  "license": "MIT",
+  "main": "dist/js/toasteo.cjs.js",
+  "module": "dist/js/toasteo.esm.js",
+  "browser": "dist/js/toasteo.umd.js",
+  "author": "Florian Husquinet <florian.husquinet@deegital.be>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fhusquinet/Toasteo.js.git"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "cross-env": "^5.1.4",
+    "jest": "^22.4.3",
+    "laravel-mix": "^2.0",
+    "rollup": "^0.65.0",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest",
+    "prepare": "npm run test && npm run build",
+    "docs": "npm run prepare && cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.jsx$": "babel-jest",
+      "^.+\\.js$": "babel-jest"
+    }
+  }
+}
