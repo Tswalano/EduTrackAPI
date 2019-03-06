@@ -52,14 +52,9 @@ public class School {
     @Column(name = "circuit")
     private String circuit;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonBackReference
-    @JoinColumn(name = "studentID")
-    private Student student;
-
     @OneToMany(mappedBy = "school", // Refers to "subject" property in Subject class
             cascade = {CascadeType.ALL})
-    private List<Grades> grades;
+    private List<Student> students;
 
     @OneToMany(mappedBy = "school", // Refers to "subject" property in Subject class
             cascade = {CascadeType.ALL})
@@ -155,21 +150,21 @@ public class School {
         this.circuit = circuit;
     }
 
-    public Student getStudent() {
-        return student;
+    public List<Student> getStudents() {
+        return students;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
-    public List<Grades> getGrades() {
-        return grades;
-    }
-
-    public void setGrades(List<Grades> grades) {
-        this.grades = grades;
-    }
+//    public List<Grades> getGrades() {
+//        return grades;
+//    }
+//
+//    public void setGrades(List<Grades> grades) {
+//        this.grades = grades;
+//    }
 
     public List<Users> getUsers() {
         return users;
@@ -191,19 +186,19 @@ public class School {
                 ", province='" + province + '\'' +
                 ", postalCode=" + postalCode +
                 ", circuit='" + circuit + '\'' +
-                ", student=" + student +
-                ", grades=" + grades +
+                ", students=" + students +
+//                ", grades=" + grades +
+                ", users=" + users +
                 '}';
     }
 
-    // Add convenience methods for Bi-Directional relationship
-    public void addGrades(Grades grade) {
-        if (grades == null) {
-            grades = new ArrayList<>();
+    //      Add a convenience method
+    public void addStudent(Student student) {
+        if (students == null) {
+            students = new ArrayList<>();
         }
-
-        grades.add(grade);
-        grade.setSchool(this);
+        students.add(student);
+        student.setSchool(this);
     }
 
 //    public void addUsers(Users user) {

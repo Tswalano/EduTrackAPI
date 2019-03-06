@@ -49,9 +49,15 @@ public class Student {
     @Column(name = "dateOfBirth")
     private Date dateOfBirth;
 
-    @OneToMany(mappedBy = "student", // Refers to "subject" property in Subject class
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    @JoinColumn(name = "schoolID")
+    private School school;
+
+
+    @OneToMany(mappedBy = "student",
             cascade = {CascadeType.ALL})
-    private List<School> school;
+    private List<Grades> grades;
 
     //  Constructor
     public Student() {
@@ -144,20 +150,29 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public List<School> getSchool() {
+    public School getSchool() {
         return school;
     }
 
-    public void setSchool(List<School> school) {
+    public void setSchool(School school) {
         this.school = school;
+    }
+
+    public List<Grades> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<Grades> grades) {
+        this.grades = grades;
     }
 
     @Override
     public String toString() {
         return "Student{" +
-                "studentID=" + id +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", gender='" + gender + '\'' +
                 ", idNumber=" + idNumber +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
@@ -167,12 +182,15 @@ public class Student {
                 '}';
     }
 
-    //      Add a convenience method
-    public void addSchool(School schools) {
-        if (school == null) {
-            school = new ArrayList<>();
+
+
+    // Add convenience methods for Bi-Directional relationship
+    public void addGrades(Grades grade) {
+        if (grades == null) {
+            grades = new ArrayList<>();
         }
-        school.add(schools);
-        schools.setStudent(this);
+
+        grades.add(grade);
+        grade.setStudent(this);
     }
 }

@@ -35,8 +35,8 @@ public class Grades {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference
-    @JoinColumn(name = "schoolID")
-    private School school;
+    @JoinColumn(name = "studentID")
+    private Student student;
 
     public Grades() {
     }
@@ -87,12 +87,12 @@ public class Grades {
         this.subjects = subjects;
     }
 
-    public School getSchool() {
-        return school;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setSchool(School school) {
-        this.school = school;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Grades {
                 ", grade=" + grade +
                 ", year=" + year +
                 ", subjects=" + subjects +
-                ", school=" + school +
+                ", student=" + student +
                 '}';
     }
 
