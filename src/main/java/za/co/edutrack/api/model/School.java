@@ -201,11 +201,11 @@ public class School {
         student.setSchool(this);
     }
 
-//    public void addUsers(Users user) {
-//        if (users == null) {
-//            users = new ArrayList<>();
-//        }
-//        users.add(user);
-////        user.setSchool(this);
-//    }
+    public void addUsers(Users user) {
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+        users.add(user);
+//        user.setSchool(this);
+    }
 }

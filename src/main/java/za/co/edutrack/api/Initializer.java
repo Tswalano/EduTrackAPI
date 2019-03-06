@@ -1,6 +1,6 @@
 package za.co.edutrack.api;
 
-import org.apache.catalina.User;
+import org.mindrot.jbcrypt.BCrypt;
 import za.co.edutrack.api.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -29,13 +29,17 @@ public class Initializer implements CommandLineRunner{
 
         Student john = new Student("David", "Van Jake", "Male", 9309106101083L,
                 "david001@gmail.com", "admin123",0617262421, john_dob.getTime());
-        Student jane = new Student("Phill", "Doeres", "Male", 97870265858574L,
+        Student jane = new Student("Jane", "Doeres", "Female", 97870265858574L,
                 "jane@gmail.com", "admin123",0617262421, jane_dob.getTime());
 
         School school1 = new School("Uptown High School", 0151234567, "Townhall City", "123 Street Name", "Nelspruit","Mpumalanga",
                 1273,"Enhlanzeni District");
         School school2 = new School("Highland Secondary School", 0131234567, "Daveyton", "321 Street Name", "Benoni","Johannesburg",
                 1273,"Eastern District");
+
+        // Hash a password for the first time
+        String hashedPassword = BCrypt.hashpw("Admin123", BCrypt.gensalt());
+        Users user = new Users("Admin","Admin","admin@admin.com",hashedPassword);
 
         Grades grades1 = new Grades("GR11",12,2013);
         Grades grades2 = new Grades("GR12",12,2016);
@@ -73,6 +77,7 @@ public class Initializer implements CommandLineRunner{
 
         school1.addStudent(john);
         school2.addStudent(jane);
+        school1.addUsers(user);
 
         this.studentRepository.save(john);
         this.studentRepository.save(jane);

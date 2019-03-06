@@ -69,6 +69,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!--Password hashing-->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <!-- Spring Boot Maven Plugin -->
