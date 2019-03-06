@@ -206,6 +206,6 @@ public class School {
             users = new ArrayList<>();
         }
         users.add(user);
-//        user.setSchool(this);
+        user.setSchool(this);
     }
 }
